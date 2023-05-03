@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePublicacionRequest;
+use App\Http\Requests\UpdatePublicacionRequest;
 use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,9 +98,25 @@ class PublicacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePublicacionRequest $request, Publicacion $publicacione)
     {
-        //
+        $this->authorize('update', [Publicacion::class, $publicacione]);
+
+        $imagen = $request->file('imagen');
+        $descripcion = $request->input('descripcion');
+
+        //Imagen
+        $nombre_imagen = time().$imagen->getClientOriginalName();
+        //Guardar en la carpeta storage
+        Storage::disk('publicaciones')->put($nombre_imagen, FacadesFile::get($imagen));
+
+        //Actualizar
+        $publicacione->update([
+            'descripcion' => $descripcion,
+            'imagen' => $nombre_imagen,
+        ]);
+
+        return redirect()->route('publicaciones.index')->with('status', 'La publicación se ha actualizado correctamente');
     }
 
     /**
