@@ -48,7 +48,7 @@
                                 <input type="submit" class="nav-link bg-transparent border-0" value="Cerrar sesion">
                             </form>
                         @elseif(Auth::guard('personal')->user() && Auth::guard('personal')->user()->tiposPersonal->rol_id == 2) 
-                            <a class="nav-link" href="{{ route('home') }}">Panel de control</a>
+                            <a class="nav-link" href="{{ route('admins.home') }}">Panel de control</a>
                         @else
                             <a class="nav-link" href="{{ route('planes.index') }}">Inscribirse</a>
                             <a class="nav-link" href="{{ route('login') }}">Clientes</a>

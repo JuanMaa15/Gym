@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 @endforeach
-                {{-- {{ $publicaciones->links() }} --}}
+                {{ $publicaciones->links() }}
             </div>
         </div>
     </section>

@@ -35,14 +35,16 @@ class PersonalPolicy
 
     public function create(Personal $personal)
     {
-        return auth('personal')->check() && auth('personal')->user()->tiposPersonal->rol_id == Rol::admin;
+        return auth('personal')->check() && $personal->tiposPersonal->rol_id == Rol::admin;
         
     }
 
 
-    public function update(Personal $personal, Personal $datos)
+    public function updateAdmin(Personal $personal, Personal $datos)
     {
-        //
+        return auth('personal')->check() 
+                && $personal->tiposPersonal->rol_id == Rol::admin
+                && $personal->id == $datos->id;
     }
 
 

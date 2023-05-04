@@ -105,6 +105,6 @@ class InstructorController extends Controller
     {   
         $instructore->delete();
 
-        return redirect()->route('instructores.index')->with('status', 'El instructor se elimino correctamente!');
+        return back()->with('status', 'El instructor se elimino correctamente!');
     }
 }

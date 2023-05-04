@@ -119,7 +119,7 @@ class ClienteController extends Controller
     {
         $cliente->delete();
 
-        return redirect()->route('clientes.index')->with('status', 'El cliente se eliminó correctamente!');
+        return back()->with('status', 'El cliente se eliminó correctamente!');
     }
 
 }

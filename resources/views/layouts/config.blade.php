@@ -9,8 +9,9 @@
                 <!-- Barra lateral -->
                 <div class="col-sm-12 col-md-12 col-lg-3 border-end">
                     <img src="{{ Auth::user()->imagen ? route('imagen.show', ['nombre_imagen' => Auth::user()->imagen]) : asset('images/perfil.jpg') }}" class="img-fluid">
-                    <form action="{{ route('imagen.update') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('imagen.update', 'web') }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <input type="file" class="form-control @error('imagen') is-invalid @enderror" name="imagen" id="imagen">
                         @error('imagen')
                             <span class="invalid-feedback" role="alert">

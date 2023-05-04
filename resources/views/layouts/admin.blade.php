@@ -38,9 +38,9 @@
                 
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" href="{{ route('home') }}">Inicio</a>
-                        <a class="nav-link" href="{{ route('admin.gestion')}}">Gestion</a>
-                        <a class="nav-link" href="#">Perfil</a>
+                        <a class="nav-link" href="{{ route('admins.home') }}">Inicio</a>
+                        <a class="nav-link" href="{{ route('admins.gestion')}}">Gestion</a>
+                        <a class="nav-link" href="{{ route('admins.edit', Auth::guard('personal')->user() ) }}">Perfil</a>
                         <a class="nav-link" href="{{ route('index') }}">Principal</a>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf

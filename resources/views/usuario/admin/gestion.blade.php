@@ -34,6 +34,16 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 pb-4">
                     <div class="card">
                         <div class="card-body">
+                            <p class="card-title">Administradores</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ route('admins.index') }}"  class="btn btn-primary">Entrar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-4 pb-4">
+                    <div class="card">
+                        <div class="card-body">
                             <p class="card-title">Publicaciones</p>
                         </div>
                         <div class="card-footer">

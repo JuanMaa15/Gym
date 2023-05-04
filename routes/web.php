@@ -9,7 +9,6 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EntrenamientoPersonalizadoController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\InstructorController;
-use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\PlanAdquiridoController;
 use App\Http\Controllers\PlanAlimentacionController;
 use App\Http\Controllers\PlanController;
@@ -59,10 +58,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('password-update', [PasswordController::class, 'update'])->name('password_update');
 
     //Imagen
-    Route::get('/imagen/show/{nombre_imagen}', [ImagenController::class, 'show'])->name('imagen.show');
-    Route::get('/imagen/show-publicacion/{nombre_imagen}', [ImagenController::class, 'showPublicacion'])->name('imagen.show_publicacion');
-    Route::post('/imagen/update', [ImagenController::class, 'update'])->name('imagen.update');
+    Route::group(['prefix' => 'imagen'], function() {
+        Route::get('show/{nombre_imagen}', [ImagenController::class, 'show'])->name('imagen.show');
+        Route::get('show-publicacion/{nombre_imagen}', [ImagenController::class, 'showPublicacion'])->name('imagen.show_publicacion');
+        Route::put('update/{guard}', [ImagenController::class, 'update'])->name('imagen.update');
+        //Route::post('update-personal', [ImagenController::class, 'updatePersonal'])->name('imagen.update_personal');
+    });
 
+    //Auth - Password
+    Route::post('password-update-personal', [PasswordController::class, 'updatePersonal'])->name('password_update_personal');
     
     //Midldleware Instructores
     Route::group(['prefix' => 'instructor', 'middleware' => 'instructor'], function() {
@@ -72,8 +76,11 @@ Route::group(['middleware' => 'auth'], function() {
     
     //Midldleware Administradores
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
-        Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-        Route::get('gestion', [PersonalController::class, 'gestion'])->name('admin.gestion');
+       
+        //Administradores
+        Route::resource('admins', AdminController::class);
+        Route::get('gestion', [AdminController::class, 'gestion'])->name('admins.gestion');
+        Route::get('home', [AdminController::class, 'home'])->name('admins.home');
 
         //Instructores
         Route::resource('instructores', InstructorController::class);

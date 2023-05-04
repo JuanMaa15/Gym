@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class ImagenController extends Controller
 {
     
-    public function update(Request $request) {
+    public function update(Request $request, $guard) {
 
         $validate = $request->validate([
             'imagen' => ['required','image']
@@ -17,18 +17,20 @@ class ImagenController extends Controller
 
         $imagen = $request->file('imagen');
 
+        //Recoger nombre de la imagen
         $nombre_imagen = time().$imagen->getClientOriginalName();
 
         //Guardar en la carpeta storage
         Storage::disk('users')->put($nombre_imagen, File::get($imagen));
 
-        $request->user()->update([
+        $request->user($guard)->update([
             'imagen' => $nombre_imagen
         ]);
 
         return back()->with('status', 'Imagen actualizada correctamente!');
 
     }
+
 
     public function show ($nombre_imagen) {
 
