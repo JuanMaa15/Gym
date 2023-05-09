@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Personal;
+use App\Models\Rol;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
     
-        if (!auth('personal')->check() || !auth('personal')->user() || auth('personal')->user()->tiposPersonal->rol_id != 2) {
+        if (!auth('personal')->check() || !auth('personal')->user() || auth('personal')->user()->tiposPersonal->rol_id != Rol::admin) {
             return redirect('/login');
         }
 

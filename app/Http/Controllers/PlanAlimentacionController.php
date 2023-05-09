@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IniciarPlanAlimenticioRequest;
 use App\Http\Requests\StorePlanAlimentacionRequest;
+use App\Models\Estado;
 use App\Models\Personal;
 use App\Models\PlanAlimenticio;
 use App\Models\SolicitudPlanAlimenticio;
@@ -18,6 +20,20 @@ class PlanAlimentacionController extends Controller
     public function index()
     {
         //
+    }
+
+    public function listos($personal_id)
+    {
+        $this->authorize('showInstructor', [PlanAlimenticio::class, $personal_id]);
+
+        // Traerme los planes alimenticios que le pertenezcan al instructor y que esten listos
+        $planes_alimenticios = PlanAlimenticio::where('personal_id', $personal_id)
+                                                ->where('estado_id', Estado::activo)
+                                                ->orderBy('id', 'DESC')
+                                                ->paginate(10);
+        
+
+        return view('plan_alimenticio.listos', compact('planes_alimenticios'));
     }
 
     /**
@@ -57,6 +73,27 @@ class PlanAlimentacionController extends Controller
         return redirect()->route('solicitud_plan_alimenticio.index')->with('status', 'El plan alimenticio fue asignado correctamente!');
     }
 
+
+    public function completar(PlanAlimenticio $plan_alimenticio) {
+
+        $this->authorize('viewInstructor', [PlanAlimenticio::class, $plan_alimenticio]);
+
+        return view('plan_alimenticio.completar_plan', compact('plan_alimenticio'));
+    }
+
+    public function iniciar(IniciarPlanAlimenticioRequest $request, PlanAlimenticio $plan_alimenticio) {
+
+        $this->authorize('update', [PlanAlimenticio::class, $plan_alimenticio]);
+
+        $validated = $request->validated();
+        $validated['estado_id'] = Estado::activo;
+
+        $plan_alimenticio->update($validated);
+
+        return redirect()->route('planes_alimenticios.show_instructores', $plan_alimenticio->personal_id)->with('status', 'El plan de alimentación se inicio correctamente');
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -68,20 +105,45 @@ class PlanAlimentacionController extends Controller
         //
     }
 
-    //Me trae los planes de alvimentacion de un cliente
+    //Me trae los planes de alimentacion de un cliente
     public function showClientes($cliente_id)
     {   
-        $this->authorize('showClientes', [PlanAlimenticio::class, $cliente_id]);
+        $this->authorize('showCliente', [PlanAlimenticio::class, $cliente_id]);
 
         // Traerme los planes alimenticios que le pertenezcan al cliente
         $planes_alimenticios = PlanAlimenticio::join('solicitudes_planes_alimenticios', 'planes_alimenticios.solicitud_plan_alimenticio_id', '=', 'solicitudes_planes_alimenticios.id')
                                                 ->where('cliente_id', $cliente_id)
+                                                ->where('estado_id', Estado::activo)
                                                 ->orderBy('planes_alimenticios.id', 'DESC')
                                                 ->get();
         
 
         return view('usuario.perfil.planes_alimentacion', compact('planes_alimenticios'));
     }
+
+    //Me trae los planes de alimentacion que asignaron a un instructor
+    public function showInstructores($personal_id)
+    {   
+        $this->authorize('showInstructor', [PlanAlimenticio::class, $personal_id]);
+
+        // Traerme los planes alimenticios que le pertenezcan al instructor
+        $planes_alimenticios = PlanAlimenticio::where('personal_id', $personal_id)
+                                                ->where('estado_id', Estado::inactivo)
+                                                ->orderBy('id', 'DESC')
+                                                ->paginate(10);
+        
+
+        return view('plan_alimenticio.show_instructores', compact('planes_alimenticios'));
+    }
+    
+
+    public function showListo(PlanAlimenticio $plan_alimenticio)
+    {   
+        $this->authorize('viewInstructor', [PlanAlimenticio::class, $plan_alimenticio]);
+
+        return view('plan_alimenticio.show_listo', compact('plan_alimenticio'));
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -112,8 +174,12 @@ class PlanAlimentacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PlanAlimenticio $plan_alimenticio)
     {
-        //
+        $this->authorize('delete', [PlanAlimenticio::class, $plan_alimenticio]);
+
+        $plan_alimenticio->delete();
+
+        return back()->with('status', 'El plan alimenticio se borró correctamente');
     }
 }

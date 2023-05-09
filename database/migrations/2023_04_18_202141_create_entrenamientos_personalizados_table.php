@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cliente_id');
             $table->date('fecha');
             $table->unsignedBigInteger('hora_id');
-            $table->text('incapacidades');
+            $table->text('incapacidades')->nullable();
             $table->text('descripcion');
 
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');

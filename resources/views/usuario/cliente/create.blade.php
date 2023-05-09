@@ -10,12 +10,14 @@
                     <h2 class="titulo text-center">Inscribirse</h2>
                 </div>
             </div>
-            @if ( session('message') )
+            {{session('status')}}
+            @if ( session('status') )
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-success">
                             Ya casi estas registrado, deberás ir personalmente al gimnasio y pagar
                             el plan seleccionado para asi validar tu inscripción.
+                            
                         </div>
                     </div>
                 </div>

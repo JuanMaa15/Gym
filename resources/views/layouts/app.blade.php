@@ -41,12 +41,21 @@
                        
                         @if (Auth::user() || (Auth::guard('personal')->user() && Auth::guard('personal')->user()->tiposPersonal->rol_id == 1))
                             
-                            <a class="nav-link" href="{{ Auth::user() ? route('clientes.edit', ['cliente' => Auth::user()]) : '' }}">Perfil</a>
+                        <a class="nav-link" href="{{ Auth::guard('personal')->user() ? route('instructores.edit', Auth::guard('personal')->user()) : route('clientes.edit', Auth::user()) }}">Perfil</a>
+
+                            @if (Auth::guard('personal')->user())
+        
+                                <a class="nav-link" href="{{ Auth::guard('personal')->user()->tiposPersonal->id == 3 ? route('planes_alimenticios.show_instructores', Auth::guard('personal')->user()) : route('horas.index') }}">Servicios</a>
+                            @else
                             <a class="nav-link" href="{{ route('entrenamiento_personalizado.create') }}">Servicios</a>
+
+                            @endif
+                            
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <input type="submit" class="nav-link bg-transparent border-0" value="Cerrar sesion">
                             </form>
+
                         @elseif(Auth::guard('personal')->user() && Auth::guard('personal')->user()->tiposPersonal->rol_id == 2) 
                             <a class="nav-link" href="{{ route('admins.home') }}">Panel de control</a>
                         @else

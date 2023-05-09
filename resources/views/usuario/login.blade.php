@@ -7,7 +7,7 @@
      <div class="container py-5">
          <div class="row">
              <div class="col">
-                 <h2 class="titulo text-center">Iniciar Sesión</h2>
+                 <h2 class="titulo text-center">Iniciar Sesión (Personal)</h2>
              </div>
          </div>
          <div class="row justify-content-center">

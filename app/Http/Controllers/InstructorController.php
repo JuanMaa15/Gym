@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexClienteInstructorRequest;
 use App\Http\Requests\StoreInstructorRequest;
+use App\Http\Requests\UpdateInstructorRequest;
 use App\Models\Personal;
 use App\Models\Rol;
 use App\Models\TipoPersonal;
@@ -24,6 +26,18 @@ class InstructorController extends Controller
 
         return view('usuario.instructor.index', compact('instructores'));
 
+    }
+
+    //Mostrar los instructores disponibles en la seccion de entrenamientos
+    // personalizados a los clientes
+    public function indexCliente(IndexClienteInstructorRequest $request) 
+    {   
+        $this->authorize('viewCliente', Personal::class);
+
+        $instructores = Personal::all();
+        $fecha = $request->input('fecha');
+
+        return view('usuario.instructor.index_cliente', compact('instructores', 'fecha'));
     }
 
     /**
@@ -78,9 +92,13 @@ class InstructorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit(Personal $instructore)
+    {   
+       $this->authorize('updateInstructor', [Personal::class, $instructore]);
+
+       $tipos_personal = TipoPersonal::where('rol_id', Rol::instructor)->get();
+
+        return view('usuario.perfil.update', compact('instructore', 'tipos_personal'));
     }
 
     /**
@@ -90,9 +108,13 @@ class InstructorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateInstructorRequest $request, Personal $instructore)
     {
-        //
+        $this->authorize('updateInstructor', [Personal::class, $instructore]);
+
+        $instructore->update($request->validated());
+
+        return back()->with('status', 'Sus datos se actualizaron correctamente!');
     }
 
     /**

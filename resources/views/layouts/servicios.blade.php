@@ -13,7 +13,25 @@
                     
                     <div class="menu-lateral py-4">
                         <ul>
-                            @if(auth()->check())
+                            @if(Auth::guard('personal')->user())
+
+                                @if(Auth::guard('personal')->user()->tiposPersonal->id == 3)
+                                    <li>
+                                        <a href="{{ route('planes_alimenticios.show_instructores', Auth::guard('personal')->user()->id) }}" class="nav-link">Planes alimenticios por realizar</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('planes_alimenticios.listos', Auth::guard('personal')->user()->id) }}" class="nav-link">Planes alimenticios listos</a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a href="{{ route('horas.index') }}" class="nav-link">Horas de entrenamientos</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('entrenamiento_personalizado.index') }}" class="nav-link">Entrenamientos personalizados</a>
+                                    </li>
+                                @endif
+                                
+                            @else
                                 <li>
                                     <a href="{{ route('entrenamiento_personalizado.create') }}" class="nav-link">Entrenamientos personalizados</a>
                                 </li>

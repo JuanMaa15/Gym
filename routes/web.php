@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EntrenamientoPersonalizadoController;
+use App\Http\Controllers\HoraController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\PlanAdquiridoController;
@@ -40,21 +41,24 @@ Route::group(['middleware' => 'auth'], function() {
 
 
     //Entrenamiento personalizado
-    Route::resource('entrenamiento_personalizado', EntrenamientoPersonalizadoController::class);
+    Route::resource('entrenamiento_personalizado', EntrenamientoPersonalizadoController::class)->only('create', 'store');
+    Route::get('entrenamiento_personalizado/completar/{fecha}', [EntrenamientoPersonalizadoController::class, 'completar'])->name('entrenamiento_personalizado.completar');
+    Route::get('entrenamiento_personalizado/lista-entrenamientos', [EntrenamientoPersonalizadoController::class, 'indexCliente'])->name('entrenamiento_personalizado.index_cliente');
+
 
     //Solicitud plan alimenticio
-    Route::resource('solicitud_plan_alimenticio', SolicitudPlanAlimenticioController::class);
+    Route::resource('solicitud_plan_alimenticio', SolicitudPlanAlimenticioController::class)->only('create', 'store');
 
     //Planes adquiridos
     Route::get('planes_adquiridos/show-clientes/{cliente_id}', [PlanAdquiridoController::class, 'showClientes'])->name('planes_adquiridos.showClientes');
-    Route::resource('planes_adquiridos', PlanAdquiridoController::class);
+    Route::resource('planes_adquiridos', PlanAdquiridoController::class)->only('create', 'store', 'show');
 
     //Planes alimenticios
-    Route::resource('planes_alimenticios', PlanAlimentacionController::class);
+    //Route::resource('planes_alimenticios', PlanAlimentacionController::class);
     Route::get('planes_alimenticios/show-clientes/{cliente_id}', [PlanAlimentacionController::class, 'showClientes'])->name('planes_alimenticios.showClientes');
 
     //Clientes
-    Route::resource('clientes', ClienteController::class)->except('create', 'show', 'delete');
+    Route::resource('clientes', ClienteController::class)->only('edit', 'update');
     Route::post('password-update', [PasswordController::class, 'update'])->name('password_update');
 
     //Imagen
@@ -67,11 +71,35 @@ Route::group(['middleware' => 'auth'], function() {
 
     //Auth - Password
     Route::post('password-update-personal', [PasswordController::class, 'updatePersonal'])->name('password_update_personal');
+
+    //Instructores
+    Route::get('instructores/list-instructores-cliente', [InstructorController::class, 'indexCliente'])->name('instructores.index_cliente');
+
+    //horas 
+    Route::get('horas/horas-disponibles/{fecha}', [HoraController::class, 'horasDisponibles'])->name('horas.horas_disponibles');
+
     
     //Midldleware Instructores
     Route::group(['prefix' => 'instructor', 'middleware' => 'instructor'], function() {
         
+        Route::resource('instructores', InstructorController::class)->only('edit', 'update');
 
+        //Planes alimenticios
+        Route::group(['prefix' => 'planes_alimenticios'], function(){
+            Route::get('show-instructores/{personal_id}', [PlanAlimentacionController::class, 'showInstructores'])->name('planes_alimenticios.show_instructores');
+            Route::get('completar/{plan_alimenticio}', [PlanAlimentacionController::class, 'completar'])->name('planes_alimenticios.completar');
+            Route::put('iniciar/{plan_alimenticio}', [PlanAlimentacionController::class, 'iniciar'])->name('planes_alimenticios.iniciar');
+            Route::get('listos/{plan_alimenticio}', [PlanAlimentacionController::class, 'listos'])->name('planes_alimenticios.listos');
+            Route::get('show-listo/{plan_alimenticio}', [PlanAlimentacionController::class, 'showListo'])->name('planes_alimenticios.show_listo');
+
+        });
+
+        //Horas 
+        Route::resource('horas', HoraController::class)->except('show');
+
+        //Entrenamiento personalizado
+        Route::resource('entrenamiento_personalizado', EntrenamientoPersonalizadoController::class)->only('index', 'show', 'destroy');
+        
     });
     
     //Midldleware Administradores
@@ -83,10 +111,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('home', [AdminController::class, 'home'])->name('admins.home');
 
         //Instructores
-        Route::resource('instructores', InstructorController::class);
+        Route::resource('instructores', InstructorController::class)->except('edit', 'update');
 
         //Clientes
-        Route::resource('clientes', ClienteController::class)->only('show', 'destroy');
+        Route::resource('clientes', ClienteController::class)->only('show', 'destroy', 'index');
         Route::put('clientes/update-estado/{cliente}', [ClienteController::class, 'updateEstado'])->name('clientes.update_estado');
 
         //Solicitud planes alimenticios
@@ -97,7 +125,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('planes_alimenticios/create-plan-alimentacion/{solicitud_plan_alimenticio}', [PlanAlimentacionController::class, 'create'])->name('planes_alimenticios.create');
 
         //Publicaciones
-        Route::resource('publicaciones', PublicacionController::class);
+        Route::resource('publicaciones', PublicacionController::class)->except('show');
     });
 
     

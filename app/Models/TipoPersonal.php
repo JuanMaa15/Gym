@@ -14,4 +14,8 @@ class TipoPersonal extends Model
     public function roles() {
         return $this->belongsTo('App\Models\Rol', 'rol_id');
     }
+
+    public const recepcion = 1;
+    public const personalizado = 2;
+    public const nutricion = 3; 
 }

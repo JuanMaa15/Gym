@@ -27,9 +27,23 @@ class PlanAlimenticioPolicy
     {
         //
     }
+   
+    public function viewInstructor(Personal $personal, PlanAlimenticio $planAlimenticio)
+    {
+        return auth('personal')->check() 
+                && $personal->tiposPersonal->rol_id == Rol::instructor
+                && $personal->id == $planAlimenticio->personal_id;
+    }
 
-    public function showClientes(Cliente $cliente, $id) {
+    public function showCliente(Cliente $cliente, $id) {
         return auth()->check() && $cliente->id == $id;
+    }
+
+
+    public function showInstructor(Personal $personal, $id) {
+        return auth('personal')->check() 
+                && $personal->tiposPersonal->rol_id == Rol::instructor
+                && $personal->id == $id;
     }
 
     public function create(Personal $personal)
@@ -38,14 +52,18 @@ class PlanAlimenticioPolicy
     }
 
     
-    public function update(Cliente $cliente, PlanAlimenticio $planAlimenticio)
+    public function update(Personal $personal, PlanAlimenticio $planAlimenticio)
     {
-        //
+        return auth('personal')->check() 
+                && $personal->tiposPersonal->rol_id == Rol::instructor
+                && $personal->id == $planAlimenticio->personal_id;
     }
 
-    public function delete(Cliente $cliente, PlanAlimenticio $planAlimenticio)
+    public function delete(Personal $personal, PlanAlimenticio $planAlimenticio)
     {
-        //
+        return auth('personal')->check() 
+                && $personal->tiposPersonal->rol_id == Rol::instructor
+                && $personal->id == $planAlimenticio->personal_id;
     }
 
     /**

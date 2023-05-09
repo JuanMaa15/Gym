@@ -8,8 +8,11 @@
             <div class="row">
                 <!-- Barra lateral -->
                 <div class="col-sm-12 col-md-12 col-lg-3 border-end">
-                    <img src="{{ Auth::user()->imagen ? route('imagen.show', ['nombre_imagen' => Auth::user()->imagen]) : asset('images/perfil.jpg') }}" class="img-fluid">
-                    <form action="{{ route('imagen.update', 'web') }}" method="post" enctype="multipart/form-data">
+
+               
+                    <img src="{{ Auth::user()->imagen ? route('imagen.show', Auth::user()->imagen) : asset('images/perfil.jpg') }}" class="img-fluid">
+
+                    <form action="{{ Auth::guard('personal')->user() ? route('imagen.update', 'personal') : route('imagen.update', 'web') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="file" class="form-control @error('imagen') is-invalid @enderror" name="imagen" id="imagen">
@@ -21,17 +24,31 @@
                         <input type="submit" class="btn btn-primary mt-3" value="Agregar foto">
                     </form>
                     <div class="menu-lateral py-4">
-                        <ul>
-                            <li>
-                                <a href="{{ Auth::user() ? route('clientes.edit', ['cliente' => Auth::user()]) : '' }}" class="nav-link">Datos personales</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('planes_adquiridos.showClientes', ['cliente_id' => Auth::user()->id]) }}" class="nav-link">Planes adquiridos</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('planes_alimenticios.showClientes', ['cliente_id' => Auth::user()->id]) }}" class="nav-link">Planes de alimentación</a>
-                            </li>
-                        </ul>
+                        @if (Auth::guard('personal')->user())
+                            <ul>
+                                <li>
+                                    <a href="{{ route('instructores.edit', Auth::guard('personal')->user() )}}" class="nav-link">Datos personales</a>
+                                </li>
+                                {{-- <li>
+                                    <a href="" class="nav-link">Planes de alimentación</a>
+                                </li> --}}
+                            </ul>
+                        @else
+                            <ul>
+                                <li>
+                                    <a href="{{ Auth::user() ? route('clientes.edit', ['cliente' => Auth::user()]) : '' }}" class="nav-link">Datos personales</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('planes_adquiridos.showClientes', ['cliente_id' => Auth::user()->id]) }}" class="nav-link">Planes adquiridos</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('planes_alimenticios.showClientes', ['cliente_id' => Auth::user()->id]) }}" class="nav-link">Planes de alimentación</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('entrenamiento_personalizado.index_cliente') }}" class="nav-link">Entrenamientos personalizados</a>
+                                </li>
+                            </ul>
+                        @endif
                     </div>
                 </div>
 

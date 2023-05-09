@@ -9,51 +9,28 @@
         </div>
     </div>
     <div class="row py-4 justify-content-center">
-        @foreach ($planes_alimenticios as $plan_alimentacion)
+        @foreach ($planes_alimenticios as $plan_alimenticio)
             <div class="col-sm-12 col-md-12 col-lg-10 pb-5">
                 <div class="card">
                     <div class="card-header">
                         Plan de alimentacion
                     </div>
                     <div class="card-body">
-                        {{ $plan_alimentacion->descripcion }} 
+                        <p class="card-title">Cliente: {{ $plan_alimenticio->solicitudesPlanesAlimenticios->clientes->nombre. ' ' . $plan_alimenticio->solicitudesPlanesAlimenticios->clientes->apellido }}</p>
+                        <p class="card-text">Edad: {{ $plan_alimenticio->solicitudesPlanesAlimenticios->edad }}</p>
+                        <p class="card-text">Peso: {{ $plan_alimenticio->solicitudesPlanesAlimenticios->peso }}</p>
+                        <p class="card-text">Alergias: {{ $plan_alimenticio->solicitudesPlanesAlimenticios->alergias }}</p>
+                        <p class="card-text">Objetivo: {{ $plan_alimenticio->solicitudesPlanesAlimenticios->objetivo }}</p>
+
+                        <p class="card-text">Descripcion del plan : {{ $plan_alimenticio->descripcion }}</p>
                     </div>
                     <div class="card-footer">
-                        Fecha inicio - Fecha fin
-                        {{ $plan_alimentacion->fecha_inicio . " - " . $plan_alimenticio->fecha_fin }} 
+                         Fecha inicio: {{ $plan_alimenticio->fecha_inicio }} - Fecha fin: {{ $plan_alimenticio->fecha_fin }} 
                     </div>
                 </div>
             </div>
         @endforeach
         
-
-        <div class="col-sm-12 col-md-12 col-lg-10 pb-5">
-            <div class="card">
-                <div class="card-header">
-                    Plan de alimentacion
-                </div>
-                <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio animi, dolorem atque facilis nulla aliquid? Nesciunt, ipsum. Eos dolorem esse in asperiores sed! Dolorum atque expedita quo veniam, impedit aperiam eum soluta fugiat dicta debitis magnam nemo aut voluptate sed reiciendis ea in totam ex explicabo! Quae maiores pariatur delectus! 
-                </div>
-                <div class="card-footer">
-                    Fecha inicio - Fecha fin
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-12 col-lg-10 pb-5">
-            <div class="card">
-                <div class="card-header">
-                    Plan de alimentacion
-                </div>
-                <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio animi, dolorem atque facilis nulla aliquid? Nesciunt, ipsum. Eos dolorem esse in asperiores sed! Dolorum atque expedita quo veniam, impedit aperiam eum soluta fugiat dicta debitis magnam nemo aut voluptate sed reiciendis ea in totam ex explicabo! Quae maiores pariatur delectus! 
-                </div>
-                <div class="card-footer">
-                    Fecha inicio - Fecha fin
-                </div>
-            </div>
-        </div>
     </div>
 
 @endsection

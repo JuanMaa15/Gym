@@ -93,6 +93,6 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        return redirect()->route('index')->with(['message' => 'Bien']); 
+        return redirect()->route('login')->with('status', 'Te has registrado correctamente, pero la cuenta se encuentra inactiva. Para ingresar y habilitar la cuenta debes de llevar el costo del plan que adquiriste al gimnasio.'); 
     }
 }

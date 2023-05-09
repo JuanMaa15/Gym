@@ -8,7 +8,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col">
-                <h2 class="titulo text-center">Iniciar Sesión</h2>
+                <h2 class="titulo text-center">Iniciar Sesión (Clientes)</h2>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -48,16 +48,16 @@
 
             </div>
         </div>
-        
+        @if (session('status'))
             <div class="row justify-content-center pt-3">
                 <div class="col-sm-12 col-md-12 col-lg-6">
                     <div class="alert alert-warning">
                         {{ session('status') }}
-                        hola
+                        
                     </div>
                 </div>
             </div>
-      
+        @endif
 
     </div>
  </section>

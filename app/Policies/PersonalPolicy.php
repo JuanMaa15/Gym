@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Models\Cliente;
+use App\Models\Estado;
 use App\Models\Personal;
 use App\Models\Rol;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -27,9 +29,17 @@ class PersonalPolicy
     }
 
    
-    public function view(Personal $personal, Personal $datos)
+    public function viewInstructor(Personal $personal, Personal $datos)
     {
-        return true;
+        return auth('personal')->check() 
+             && $personal->tiposPersonal->rol_id == Rol::instructor
+             && $personal->id == $datos->id; 
+    }
+
+    public function viewCliente(Cliente $cliente) 
+    {
+
+        return auth()->check() && $cliente->estado_id == Estado::activo;
     }
 
 
@@ -45,6 +55,13 @@ class PersonalPolicy
         return auth('personal')->check() 
                 && $personal->tiposPersonal->rol_id == Rol::admin
                 && $personal->id == $datos->id;
+    }
+
+    public function updateInstructor(Personal $personal, Personal $datos)
+    {
+        return auth('personal')->check() 
+             && $personal->tiposPersonal->rol_id == Rol::instructor
+             && $personal->id == $datos->id; 
     }
 
 

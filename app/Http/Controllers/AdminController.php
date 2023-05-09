@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\UpdateAdminRequest;
 use App\Models\Cliente;
 use App\Models\Estado;
 use App\Models\Personal;
@@ -126,9 +127,13 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateAdminRequest $request, Personal $admin)
     {
-        //
+        $this->authorize('updateAdmin', [Personal::class, $admin]);
+
+        $admin->update($request->validated());
+
+        return back()->with('status', 'Sus datos se actualizaron correctamente!');
     }
 
     /**

@@ -5,6 +5,9 @@ namespace App\Policies;
 use App\Models\Cliente;
 use App\Models\EntrenamientoPersonalizado;
 use App\Models\Estado;
+use App\Models\Personal;
+use App\Models\Rol;
+use App\Models\TipoPersonal;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EntrenamientoPersonalizadoPolicy
@@ -17,9 +20,16 @@ class EntrenamientoPersonalizadoPolicy
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(Cliente $cliente)
+    public function viewAny(Personal $personal)
     {
-        //
+        return auth('personal')->check() 
+            && $personal->tiposPersonal->rol_id == Rol::instructor
+            && $personal->tiposPersonal->id == TipoPersonal::personalizado;
+    }
+
+    public function viewAnyCliente(Cliente $cliente)
+    {
+        return auth()->check() && $cliente->estado_id == Estado::activo; 
     }
 
     /**
@@ -29,9 +39,12 @@ class EntrenamientoPersonalizadoPolicy
      * @param  \App\Models\EntrenamientoPersonalizado  $entrenamientoPersonalizado
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Cliente $cliente, EntrenamientoPersonalizado $entrenamientoPersonalizado)
+    public function view(Personal $personal, EntrenamientoPersonalizado $entrenamientoPersonalizado)
     {
-        //
+        return auth('personal')->check() 
+            && $personal->tiposPersonal->rol_id == Rol::instructor
+            && $personal->tiposPersonal->id == TipoPersonal::personalizado
+            && $personal->id == $entrenamientoPersonalizado->horas->personal->id;
     }
 
     /**
@@ -64,9 +77,12 @@ class EntrenamientoPersonalizadoPolicy
      * @param  \App\Models\EntrenamientoPersonalizado  $entrenamientoPersonalizado
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Cliente $cliente, EntrenamientoPersonalizado $entrenamientoPersonalizado)
+    public function delete(Personal $personal, EntrenamientoPersonalizado $entrenamientoPersonalizado)
     {
-        //
+        return auth('personal')->check() 
+            && $personal->tiposPersonal->rol_id == Rol::instructor
+            && $personal->tiposPersonal->id == TipoPersonal::personalizado
+            && $personal->id == $entrenamientoPersonalizado->horas->personal->id;
     }
 
     /**
