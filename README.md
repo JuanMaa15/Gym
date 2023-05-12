@@ -5,6 +5,7 @@ Aplicación web de gimnasio desarrollada con laravel 9
 Instalación:
 
 npm install
+
 npm run dev
 
 Tener en cuenta:
