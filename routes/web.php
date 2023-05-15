@@ -141,7 +141,7 @@ Route::resource('planes', PlanController::class)->only('index');
 
 //Auth
 Auth::routes(['register' => false]);
-Route::post('/login-personal', [LoginController::class, 'loginPersonal'])->name('login_personal');
-Route::get('/login-personal', [LoginController::class, 'showLoginFormPersonal'])->name('login_personal');
+Route::post('/login-personal', [LoginPersonalController::class, 'login'])->name('login_personal');
+Route::get('/login-personal', [LoginPersonalController::class, 'showLoginForm'])->name('login_personal');
 //(El controlador LoginPersonal esta sin )
 

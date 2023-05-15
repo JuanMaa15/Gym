@@ -52,7 +52,7 @@ class SolicitudPlanAlimenticioController extends Controller
 
         SolicitudPlanAlimenticio::create($validated);
 
-        return back()->with('status', 'Tu plan de alimentación se envió correctamente!');
+        return back()->with('status', 'Tu plan de alimentación se envió correctamente, debes esperar al menos 4 días para que un instructor realice tu plan alimenticio');
     }
 
     /**
