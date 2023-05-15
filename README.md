@@ -4,11 +4,23 @@ Aplicación web de gimnasio desarrollada con laravel 9
 
 Instalación:
 
-composer install
+- composer install
 
-npm install
+Luego cambia el nombre del archivo ".env.example" que se encuentra en la carpeta raíz por '.env'
 
-npm run dev
+- php artisan key:generate
+
+Crear la base de datos y en el archivo ".env" defines el mismo nombre de la base de datos en "DB_DATABASE"
+
+- php artisan migrate
+
+- php artisan serve
+
+En otra pestaña de la consola:
+
+- npm install
+
+- npm run dev
 
 
 ======================================================

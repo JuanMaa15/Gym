@@ -35,6 +35,9 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
+Route::get('/home', function () {
+    return view('index');
+})->name('index');
 
 //Autenticacion usuario
 Route::group(['middleware' => 'auth'], function() {
