@@ -50,4 +50,9 @@ class LoginPersonalController extends Controller
     {
         return view('usuario.login');
     }
+
+    public function username()
+    {
+        return 'id';
+    }
 }
